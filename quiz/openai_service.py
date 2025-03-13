@@ -41,3 +41,20 @@ def generate_procedural_question(question_type, level, language):
         return None
 
     return question_data
+
+def translate_json(data, idioma_destino="en"):
+    prompt = (
+        f"Translate the following JSON object to {idioma_destino}, "
+        "keeping the JSON structure unchanged:\n\n"
+        f"{json.dumps(data, indent=2)}"
+    )
+
+    resposta = openai.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    try:
+        return json.loads(resposta.choices[0].message.content)
+    except json.JSONDecodeError:
+        return None  # Se falhar, retorna None
