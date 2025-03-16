@@ -18,15 +18,16 @@ def questions_list(request):
 
 @require_GET
 def search_random_question(request):
-    question_type = request.GET.get("type")
-    level = request.GET.get("level")
+
+    id = request.GET.get("id")
+    question_types = request.GET.getlist("types")  # ["artificial_intelligence", "history"]
     language = request.GET.get("lang", "en").lower()
 
-    if not question_type or not level:
-        return JsonResponse({"error": "Params 'type' and 'level' are required."}, status=400)
+    if not question_types or not id:
+        return JsonResponse({"error": "Params 'id' and 'types' are required."}, status=400)
 
     # Busca questão aleatória
-    result = get_random_question(question_type, level)
+    result = get_random_question(id, question_types)
     if not result:
         return JsonResponse({"error": "No question found"}, status=404)
 

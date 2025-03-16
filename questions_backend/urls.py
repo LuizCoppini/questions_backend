@@ -6,5 +6,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/questions/', questions_list, name='questions_list'),
     path('api/search_random_question/', search_random_question, name='search_random_question'),
-    path('api/procedural-question/', procedural_question, name='procedural_question'),
+    path('api/procedural_question/', procedural_question, name='procedural_question'),
 ]
