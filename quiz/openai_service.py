@@ -24,6 +24,8 @@ def generate_procedural_question(question_type, level, language):
     }}
 
     Ensure that the JSON format is always valid, without additional text or explanations.
+    Ensure to not use common questions to avoid repeted questions.
+    the param "level" have to be by extense.
     """
 
     response = openai.chat.completions.create(

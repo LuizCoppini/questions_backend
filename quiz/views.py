@@ -2,6 +2,10 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .repository import get_questions_by_type_and_level, get_random_question
 from .openai_service import generate_procedural_question, translate_json
+import random
+
+
+levels = ['easy', 'medium', 'hard']
 
 @require_GET
 def questions_list(request):
@@ -20,14 +24,14 @@ def questions_list(request):
 def search_random_question(request):
 
     id = request.GET.get("id")
-    question_types = request.GET.getlist("types")  # ["artificial_intelligence", "history"]
+    types = request.GET.getlist("types")  # ["artificial_intelligence", "history"]
     language = request.GET.get("lang", "en").lower()
 
-    if not question_types or not id:
+    if not types or not id:
         return JsonResponse({"error": "Params 'id' and 'types' are required."}, status=400)
 
     # Busca questão aleatória
-    result = get_random_question(id, question_types)
+    result = get_random_question(id, types)
     if not result:
         return JsonResponse({"error": "No question found"}, status=404)
 
@@ -43,10 +47,12 @@ def search_random_question(request):
 def procedural_question(request):
     # Pegar parâmetros ?type=xxx&level=xxx&lang=xxx
     question_type = request.GET.get("type", "variety")
-    level = request.GET.get("level", "easy")
+
+    level = random.choice(levels)
+    #level = request.GET.get("level", "easy")
     language = request.GET.get("lang", "en")
 
-    question_data = generate_procedural_question(question_type, level, language)
+    question_data = generate_procedural_question(question_type, level[0], language)
     if question_data is None:
         return JsonResponse({"error": "Failed to generate question"}, status=500)
 
