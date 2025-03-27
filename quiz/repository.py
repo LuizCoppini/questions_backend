@@ -12,7 +12,7 @@ def get_random_question(id, types):
     chosen_type = random.choice(types)
 
     query = f"""
-        SELECT c.question, c.options, c.level, c.id_correct, c.correct
+        SELECT c.question, c.type, c.options, c.level, c.id_correct, c.correct
         FROM c
         WHERE c.id = '{id}' AND c.type = '{chosen_type}'
         """
