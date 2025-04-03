@@ -52,7 +52,7 @@ def procedural_question(request):
     #level = request.GET.get("level", "easy")
     language = request.GET.get("lang", "en")
 
-    question_data = generate_procedural_question(question_type, level[0], language)
+    question_data = generate_procedural_question(question_type, level, language)
     if question_data is None:
         return JsonResponse({"error": "Failed to generate question"}, status=500)
 

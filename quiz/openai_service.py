@@ -6,33 +6,35 @@ from django.conf import settings
 openai.api_key = settings.OPENAI_API_KEY
 
 def generate_procedural_question(question_type, level, language):
-
     prompt = f"""
-    Generate a JSON object with a multiple-choice question about {question_type}.
-    The question must have 4 answer options and only one correct answer.
-    The difficulty level should be {level}.
+    Generate a JSON object with a unique, creative multiple-choice question about {question_type}.
+    Ensure the question is original and different from common examples.
+    Use the difficulty level in full text ({level}).
+    The question must have 4 answer options, only one of which is correct.
     Language: {language}.
+    
+    The possibles questions types are: ['easy', 'medium', 'hard'], be sure to describe the exact type em "level".
+
+    Ensure the JSON format is always valid, without additional text or explanations.
+    Avoid using common or frequently repeated questions.
 
     Return only a JSON object with the following structure:
 
     {{
       "type": "{question_type}",
       "level": "{level}",
-      "question": "Generated question",
+      "question": "A unique and original question",
       "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
       "correct": "Correct answer"
     }}
-
-    Ensure that the JSON format is always valid, without additional text or explanations.
-    Ensure to not use common questions to avoid repeted questions.
-    the param "level" have to be by extense.
     """
 
     response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=150,
-        temperature=0.7
+        temperature=0.8,  # Maior criatividade
+        top_p=0.9
     )
 
     content = response.choices[0].message.content
